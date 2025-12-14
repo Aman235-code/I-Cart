@@ -375,6 +375,42 @@ export const changePassword = async (req, res) => {
   }
 };
 
-export const allUsers = async(req, res)=> {
-  
-}
+export const allUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId).select(
+      "-password -otp -otpExpiry -token"
+    );
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User Not Found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
