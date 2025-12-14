@@ -1,7 +1,107 @@
+import { ShoppingCart } from "lucide-react";
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import axios from "axios";
+import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/redux/userSlice";
 
 const Navbar = () => {
-  return <div>Navbar</div>;
+  const { user } = useSelector((store) => store.user);
+  const accessToken = localStorage.getItem("accessToken");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/user/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(setUser(null));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <header className="fixed top-0 w-full z-20 bg-white backdrop-blur border-b border-pink-200">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-14">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <img
+            src="/ICart.png"
+            alt="ICart"
+            className="h-8 w-auto object-contain"
+          />
+          <h1 className="font-bold text-purple-500">I-Cart</h1>
+        </Link>
+
+        {/* Navigation */}
+        <nav className="flex items-center gap-8">
+          <ul className="flex items-center gap-6 text-sm font-medium text-gray-700">
+            <li>
+              <Link to="/" className="hover:text-pink-600 transition">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/products" className="hover:text-pink-600 transition">
+                Products
+              </Link>
+            </li>
+            {user && (
+              <li>
+                <Link to="/profile" className="hover:text-pink-600 transition">
+                  Hi, {user.firstName}
+                </Link>
+              </li>
+            )}
+          </ul>
+
+          {/* Cart */}
+          <Link
+            to="/cart"
+            className="relative text-gray-700 hover:text-pink-600"
+          >
+            <ShoppingCart size={20} />
+            <span className="absolute -top-2 -right-3 bg-pink-500 text-white text-xs rounded-full px-1.5">
+              0
+            </span>
+          </Link>
+
+          {/* Auth Button */}
+          {user ? (
+            <Button
+              onClick={logoutHandler}
+              size="sm"
+              className="bg-pink-600 hover:bg-pink-700 text-white"
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              onClick={() => navigate("/login")}
+              size="sm"
+              className="bg-linear-to-tr hover:cursor-pointer from-blue-600 to-purple-600 text-white hover:bg-blue-500"
+            >
+              Login
+            </Button>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
 };
 
 export default Navbar;
