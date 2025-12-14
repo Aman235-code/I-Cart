@@ -2,6 +2,7 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { verifyEmail } from "../emailVerify/verifyEmail.js";
+import { Session } from "../models/sessionModel.js";
 
 export const register = async (req, res) => {
   try {
@@ -136,6 +137,109 @@ export const reverify = async (req, res) => {
       success: true,
       message: "Verification Email Sent again successfully",
       token: user.token,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User not exists",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Credentials",
+      });
+    }
+
+    if (existingUser.isVerified === false) {
+      return res.status(400).json({
+        success: false,
+        message: "Verify your account and then login",
+      });
+    }
+
+    const accessToken = jwt.sign(
+      {
+        id: existingUser._id,
+      },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "10d",
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      {
+        id: existingUser._id,
+      },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    existingUser.isLoggedIn = true;
+    await existingUser.save();
+
+    // deleting existing session
+    const existingSession = await Session.findOne({ userId: existingUser._id });
+    if (existingSession) {
+      await Session.deleteOne({ userId: existingUser._id });
+    }
+
+    // create a new session
+    await Session.create({
+      userId: existingUser._id,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: `Welcome back ${existingUser.firstName}`,
+      user: existingUser,
+      accessToken,
+      refreshToken,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    const userId = req.id;
+    await Session.deleteMany({ userId: userId });
+    await User.findByIdAndUpdate(userId, { isLoggedIn: false });
+    return res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
     });
   } catch (error) {
     return res.status(500).json({
