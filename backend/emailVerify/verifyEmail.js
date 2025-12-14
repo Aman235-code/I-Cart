@@ -19,7 +19,12 @@ export const verifyEmail = (token, email) => {
     from: process.env.MAIL_USER,
     to: email,
     subject: "Email Verification",
-    text: "Node.js testing mail for GeeksforGeeks",
+    text: `Hi There, you have recently visited
+    our website and entered your email.
+    Please follow the given link to verify your email
+    http://localhost:5173/verify/${token}
+    Thanks
+    `,
   };
 
   mailTransporter.sendMail(mailDetails, function (err, data) {
