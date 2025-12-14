@@ -1,11 +1,13 @@
 import express from "express";
 import {
+  changePassword,
   forgotPassword,
   login,
   logout,
   register,
   reverify,
   verify,
+  verifyOTP,
 } from "../controllers/userController.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
 
@@ -17,5 +19,7 @@ router.post("/reverify", reverify);
 router.post("/login", login);
 router.post("/logout", isAuthenticated, logout);
 router.post("/forgot-password", forgotPassword);
+router.post("/verify-otp/:email", verifyOTP);
+router.post("/change-password/:email", changePassword);
 
 export default router;
