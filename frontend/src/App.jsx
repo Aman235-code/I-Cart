@@ -53,11 +53,12 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/profile",
+    path: "/profile/:userId",
     element: (
       <>
         <Navbar />
         <Profile />
+        <Footer/>
       </>
     ),
   },

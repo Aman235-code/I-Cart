@@ -62,7 +62,10 @@ const Navbar = () => {
             </li>
             {user && (
               <li>
-                <Link to="/profile" className="hover:text-pink-600 transition">
+                <Link
+                  to={`/profile/${user._id}`}
+                  className="hover:text-pink-600 transition"
+                >
                   Hi, {user.firstName}
                 </Link>
               </li>
