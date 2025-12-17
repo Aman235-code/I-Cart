@@ -3,6 +3,7 @@ import "dotenv/config";
 import connectDB from "./database/db.js";
 import userRoute from "./routes/userRoutes.js";
 import productRoute from "./routes/productRoute.js";
+import cartRoute from "./routes/cartRoute.js";
 import cors from "cors";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/cart", cartRoute);
 
 app.listen(PORT, () => {
   connectDB();
