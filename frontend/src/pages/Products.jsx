@@ -23,6 +23,8 @@ const Products = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [brand, setBrand] = useState("All");
+  const [sortOrder, setSortOrder] = useState("");
+
   const dispatch = useDispatch();
 
   const getAllProducts = async () => {
@@ -49,7 +51,7 @@ const Products = () => {
 
     if (search.trim() !== "") {
       filtered = filtered.filter((p) =>
-        p.productName?.toLowercase().includes(search.toLowerCase())
+        p.productName?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -65,8 +67,14 @@ const Products = () => {
       (p) => p.productPrice >= priceRange[0] && p.productPrice <= priceRange[1]
     );
 
-    
-  });
+    if (sortOrder === "lowtohigh") {
+      filtered.sort((a, b) => a.productPrice - b.productPrice);
+    } else if (sortOrder === "hightolow") {
+      filtered.sort((a, b) => b.productPrice - a.productPrice);
+    }
+
+    dispatch(setProducts(filtered));
+  }, [search, category, brand, sortOrder, priceRange, allProducts, dispatch]);
 
   useEffect(() => {
     getAllProducts();
@@ -90,7 +98,7 @@ const Products = () => {
         {/* Main product section  */}
         <div className="flex flex-col flex-1">
           <div className="flex justify-end mb-4">
-            <Select>
+            <Select onValueChange={(value) => setSortOrder(value)}>
               <SelectTrigger className="w-50">
                 <SelectValue placeholder="Sort by Price" />
               </SelectTrigger>
@@ -104,7 +112,7 @@ const Products = () => {
           </div>
           {/* product grid  */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
-            {allProducts.map((product) => {
+            {products.map((product) => {
               return (
                 <ProductCard
                   key={product._id}
