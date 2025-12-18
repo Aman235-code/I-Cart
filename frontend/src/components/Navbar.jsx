@@ -9,6 +9,7 @@ import { setUser } from "@/redux/userSlice";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.user);
+  const { cart } = useSelector((store) => store.products);
   const accessToken = localStorage.getItem("accessToken");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const Navbar = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error(error);
     }
   };
 
@@ -38,13 +40,16 @@ const Navbar = () => {
     <header className="fixed top-0 w-full z-20 bg-white backdrop-blur border-b border-pink-200">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-14">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-3 group">
           <img
             src="/ICart.png"
             alt="ICart"
-            className="h-8 w-auto object-contain"
+            className="h-10 w-10 object-contain transition-transform duration-200 group-hover:scale-105"
           />
-          <h1 className="font-bold text-purple-500">I-Cart</h1>
+
+          <h1 className="text-2xl font-extrabold tracking-tight text-purple-600">
+            I<span className="text-purple-400">-</span>Cart
+          </h1>
         </Link>
 
         {/* Navigation */}
@@ -79,7 +84,7 @@ const Navbar = () => {
           >
             <ShoppingCart size={20} />
             <span className="absolute -top-2 -right-3 bg-pink-500 text-white text-xs rounded-full px-1.5">
-              0
+              {cart?.items?.length || 0}
             </span>
           </Link>
 

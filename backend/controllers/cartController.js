@@ -31,6 +31,7 @@ export const addToCart = async (req, res) => {
 
     // check if product exists
     const product = await Product.findById(productId);
+
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -39,7 +40,7 @@ export const addToCart = async (req, res) => {
     }
 
     // find the users cart if exists
-    let cart = await Cart.findOne(userId);
+    let cart = await Cart.findOne({ userId });
 
     // if car doesn't exists create a new one
     if (!cart) {
@@ -57,7 +58,7 @@ export const addToCart = async (req, res) => {
     } else {
       // find if product already in cart
       const itemIndex = cart.items.findIndex(
-        (item) => item.productId.toString() === productId
+        (item) => item.productId.toString() === productId.toString()
       );
 
       if (itemIndex > -1) {
@@ -74,7 +75,8 @@ export const addToCart = async (req, res) => {
 
       // recalculate total price
       cart.totalPrice = cart.items.reduce(
-        (acc, item) => acc + item.price * item.quantity
+        (acc, item) => acc + item.price * item.quantity,
+        0
       );
     }
 
