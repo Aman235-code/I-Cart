@@ -11,6 +11,7 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.user);
   const { cart } = useSelector((store) => store.products);
   const accessToken = localStorage.getItem("accessToken");
+  const admin = user?.role === "admin" ? true : false;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -71,7 +72,17 @@ const Navbar = () => {
                   to={`/profile/${user._id}`}
                   className="hover:text-pink-600 transition"
                 >
-                  Hi, {user.firstName}
+                  Hello, {user.firstName}
+                </Link>
+              </li>
+            )}
+            {admin && (
+              <li>
+                <Link
+                  to={`/dashboard/sales`}
+                  className="hover:text-pink-600 transition"
+                >
+                  Dashboard
                 </Link>
               </li>
             )}

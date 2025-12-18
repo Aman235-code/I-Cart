@@ -23,7 +23,6 @@ const Profile = () => {
   const params = useParams();
   const userId = params.userId;
   const dispatch = useDispatch();
-  console.warn(user);
 
   const [updateUser, setUpdateUser] = useState({
     firstName: user?.firstName,
