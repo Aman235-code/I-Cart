@@ -3,10 +3,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import userLogo from "../assets/user.jpg";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart } = useSelector((store) => store.products);
@@ -15,7 +15,7 @@ const Cart = () => {
   const shipping = subtotal > 299 ? 0 : 10;
   const tax = subtotal * 0.05;
   const total = subtotal + shipping + tax;
-
+  const navigate = useNavigate();
 
   return (
     <div className="pt-20 bg-gray-50 min-h-screen">
@@ -106,7 +106,23 @@ const Cart = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center"></div>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
+          <div className="bg-pink-100 p-6 rounded-full">
+            <ShoppingCart className="w-16 h-16 text-pink-600" />
+          </div>
+          <h2 className="mt-6 text-2xl font-bold text-gray-800">
+            Your Cart is Empty
+          </h2>
+          <p className="mt-2 text-gray-600">
+            Looks like you haven't added anything to your cart yet
+          </p>
+          <Button
+            onClick={() => navigate("/products")}
+            className="mt-6 bg-pink-600 text-white py-3 hover:bg-pink-700 cursor-pointer"
+          >
+            Start Shopping
+          </Button> 
+        </div>
       )}
     </div>
   );
