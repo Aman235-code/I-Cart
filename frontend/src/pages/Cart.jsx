@@ -1,12 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import userLogo from "../assets/user.jpg";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { setCart } from "@/redux/productSlice";
+import { toast } from "sonner";
 
 const Cart = () => {
   const { cart } = useSelector((store) => store.products);
@@ -16,6 +20,79 @@ const Cart = () => {
   const tax = subtotal * 0.05;
   const total = subtotal + shipping + tax;
   const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem("accessToken");
+  console.warn(accessToken);
+
+  const dispatch = useDispatch();
+
+  const loadCart = async () => {
+    console.warn("here");
+    try {
+      const res = await axios.get(`http://localhost:8000/api/v1/cart`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (res.data.success) {
+        dispatch(setCart(res.data.cart));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadCart();
+  }, [dispatch]);
+
+  const handleUpdateQuantity = async (productId, type) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:8000/api/v1/cart/update`,
+        {
+          productId,
+          type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(setCart(res.data.cart));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemove = async (productId) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/v1/cart/remove`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          data: {
+            productId,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(setCart(res.data.cart));
+        toast.success("Product Removed From Cart");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="pt-20 bg-gray-50 min-h-screen">
@@ -34,7 +111,7 @@ const Cart = () => {
                         <img
                           className="w-25 h-25"
                           src={
-                            product?.productId?.productImg[0]?.url || userLogo
+                            product?.productId?.productImg?.[0]?.url || userLogo
                           }
                         />
                         <div className="w-70">
@@ -45,14 +122,37 @@ const Cart = () => {
                         </div>
                       </div>
                       <div className="flex gap-5 items-center">
-                        <Button variant="outline">-</Button>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              product.productId._id,
+                              "decrease"
+                            )
+                          }
+                        >
+                          -
+                        </Button>
                         <span>{product?.quantity}</span>
-                        <Button variant="outline">+</Button>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              product.productId._id,
+                              "increase"
+                            )
+                          }
+                        >
+                          +
+                        </Button>
                       </div>
                       <p>
                         ₹{product?.productId?.productPrice * product?.quantity}
                       </p>
-                      <p className="flex text-red-500 items-center gap-1 cursor-pointer">
+                      <p
+                        onClick={() => handleRemove(product?.productId?._id)}
+                        className="flex text-red-500 items-center gap-1 cursor-pointer"
+                      >
                         <Trash2 className="w-4 h-4" />
                         Remove
                       </p>
@@ -121,7 +221,7 @@ const Cart = () => {
             className="mt-6 bg-pink-600 text-white py-3 hover:bg-pink-700 cursor-pointer"
           >
             Start Shopping
-          </Button> 
+          </Button>
         </div>
       )}
     </div>
