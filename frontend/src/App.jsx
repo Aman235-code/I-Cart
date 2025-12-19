@@ -110,7 +110,7 @@ const router = createBrowserRouter([
       <ProtectedRoute adminOnly={true}>
         <Navbar />
         <Dashboard />
-        <Footer />
+        {/* <Footer /> */}
       </ProtectedRoute>
     ),
     children: [
