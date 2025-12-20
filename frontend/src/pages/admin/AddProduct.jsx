@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { setProducts } from "@/redux/productSlice";
-import store from "@/redux/store";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
