@@ -422,9 +422,10 @@ export const updateUser = async (req, res) => {
     const loggedInUser = req.user;
     const { firstName, lastName, address, city, zipCode, phoneNo, role } =
       req.body;
+
     if (
       loggedInUser._id.toString() !== userIdToUpdate &&
-      loggedInUser.role != admin
+      loggedInUser.role != "admin"
     ) {
       return res.status(403).json({
         success: false,

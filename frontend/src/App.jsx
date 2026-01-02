@@ -20,6 +20,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import UserInfo from "./pages/admin/UserInfo";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SingleProduct from "./pages/SingleProduct";
+import AddressForm from "./pages/AddressForm";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Navbar />
         <Cart />
+        <Footer />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/address",
+    element: (
+      <ProtectedRoute>
+        <Navbar />
+        <AddressForm />
         <Footer />
       </ProtectedRoute>
     ),

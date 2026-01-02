@@ -5,6 +5,8 @@ const productSlice = createSlice({
   initialState: {
     products: [],
     cart: [],
+    addresses: [],
+    selectedAdress: null,
   },
   reducers: {
     // actions
@@ -14,8 +16,29 @@ const productSlice = createSlice({
     setCart: (state, action) => {
       state.cart = action.payload;
     },
+    addAddress: (state, action) => {
+      if (!state.addresses) state.addresses = [];
+      state.addresses.push(action.payload);
+    },
+    setSelectedAddress: (state, action) => {
+      state.selectedAdress = action.payload;
+    },
+    deleteAddresses: (state, action) => {
+      state.addresses = state.addresses.filter(
+        (_, index) => index !== action.payload
+      );
+      if (state.selectedAdress === action.payload) {
+        state.selectedAdress = null;
+      }
+    },
   },
 });
 
-export const { setProducts, setCart } = productSlice.actions;
+export const {
+  setProducts,
+  setCart,
+  addAddress,
+  setSelectedAddress,
+  deleteAddresses,
+} = productSlice.actions;
 export default productSlice.reducer;
