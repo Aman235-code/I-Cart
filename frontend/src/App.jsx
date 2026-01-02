@@ -17,7 +17,7 @@ import AdminProduct from "./pages/admin/AdminProduct";
 import AdminOrders from "./pages/admin/AdminOrders";
 import ShowUserOrders from "./pages/admin/ShowUserOrders";
 import AdminUsers from "./pages/admin/AdminUsers";
-import UnserInfo from "./pages/admin/UnserInfo";
+import UserInfo from "./pages/admin/UserInfo";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SingleProduct from "./pages/SingleProduct";
 
@@ -140,7 +140,7 @@ const router = createBrowserRouter([
       },
       {
         path: "users/:id",
-        element: <UnserInfo />,
+        element: <UserInfo />,
       },
     ],
   },

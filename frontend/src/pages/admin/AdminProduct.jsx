@@ -59,12 +59,12 @@ const AdminProduct = () => {
   };
 
   let filteredProducts = products.filter((product) => {
-    return product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    return (
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase());
+      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
-
-  console.warn(filteredProducts);
 
   if (sortOrder === "lowtohigh") {
     filteredProducts = [...filteredProducts].sort(
@@ -97,7 +97,7 @@ const AdminProduct = () => {
         dispatch(setProducts(remainingProducts));
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
