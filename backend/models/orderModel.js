@@ -42,15 +42,15 @@ const orderScehma = new mongoose.Schema(
       default: "Pending",
     },
     // razorpay fields
-    razorpayOrderId: {
-      type: String,
-    },
-    razorpayPaymentId: {
-      type: String,
-    },
-    razorpaySignature: {
-      type: String,
-    },
+    // razorpayOrderId: {
+    //   type: String,
+    // },
+    // razorpayPaymentId: {
+    //   type: String,
+    // },
+    // razorpaySignature: {
+    //   type: String,
+    // },
   },
   {
     timestamps: true,
