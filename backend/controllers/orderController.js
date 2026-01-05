@@ -2,6 +2,8 @@ import razorpayInstance from "../config/razorpay.js";
 import { Order } from "../models/orderModel.js";
 import { Cart } from "../models/cartModel.js";
 import crypto from "crypto";
+import { User } from "../models/userModel.js";
+import { Product } from "../models/productModel.js";
 
 // export const createOrder = async (req, res) => {
 //   try {
@@ -165,6 +167,55 @@ export const getAllOrders = async (req, res) => {
       count: orders.length,
       orders,
     });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getSalesData = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments({});
+    const totalProducts = await Product.countDocuments([]);
+    const totalOrders = await Order.countDocuments({ status: "Paid" });
+
+    const totalSalesAgg = await Order.aggregate([
+      { $match: { status: "Paid" } },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
+    ]);
+
+    const totalSales = totalSalesAgg[0]?.total || 0;
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    salesbyDate = await Order.aggregate([
+      { $match: { status: "Paid", createdAt: { $gte: thirtyDaysAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          amount: { $sum: "$amount" },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    const formattedSales = salesbyDate.map((item) => ({
+      date: item._id,
+      amount: item.amount,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      totalUsers,
+      totalProducts,
+      totalOrders,
+      totalSales,
+      sales: formattedSales,
+    });
+    
   } catch (error) {
     return res.status(500).json({
       success: false,
