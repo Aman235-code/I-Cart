@@ -1,12 +1,14 @@
 import express from "express";
+// import { getAllOrders, getUserOrders } from "../controllers/orderController";
 // import { isAuthenticated } from "../middleware/isAuthenticated.js";
 // import { createOrder, verifyPayment } from "../controllers/orderController.js";
-
 
 const router = express.Router();
 
 // router.post("/create-order", isAuthenticated, createOrder);
 // router.post("/verify-payment", isAuthenticated, verifyPayment);
-
+// router.get("/myorder", isAuthenticated, getMyOrder)
+// router.get("/all", isAuthenticated, isAdmin, getAllOrders);
+// router.get("/user-order/:userId", isAuthenticated,isAdmin, getUserOrders);
 
 export default router;

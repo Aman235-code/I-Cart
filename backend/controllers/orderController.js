@@ -129,3 +129,46 @@ import crypto from "crypto";
 //     });
 //   }
 // };
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await Order.find({ user: userId })
+      .populate({
+        path: "products.productId",
+        select: "productName productPrice productImg",
+      })
+      .populate("user", "firstName lastName email");
+
+    return res.status(200).json({
+      success: true,
+      count: orders.length,
+      orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = Order.find()
+      .sort({ createdAt: -1 })
+      .populate("user", "name email")
+      .populate("products.productId", "productName productPrice");
+
+    return res.status(200).json({
+      success: true,
+      count: orders.length,
+      orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
