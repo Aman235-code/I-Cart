@@ -41,6 +41,37 @@ import { Product } from "../models/productModel.js";
 //   }
 // };
 
+
+export const createOrder = async (req, res) => {
+  try {
+    const { products, amount, tax, shipping, currency } = req.body;
+
+    const newOrder = new Order({
+      user: req.user._id,
+      products,
+      amount,
+      tax,
+      shipping,
+      currency: currency || "INR",
+      status: "Placed",
+    });
+
+    await newOrder.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Order placed successfully",
+      order: newOrder,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 // export const verifyPayment = async (req, res) => {
 //   try {
 //     const {
@@ -108,6 +139,14 @@ import { Product } from "../models/productModel.js";
 //     });
 //   }
 // };
+
+export const verifyPayment = async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Dummy payment verified",
+  });
+};
+
 
 // export const getMyOrder = async (req, res) => {
 //   try {
