@@ -180,6 +180,7 @@ export const getUserOrders = async (req, res) => {
       count: orders.length,
       orders,
     });
+
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -190,9 +191,9 @@ export const getUserOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-    const orders = Order.find()
+    const orders = await Order.find()
       .sort({ createdAt: -1 })
-      .populate("user", "name email")
+      .populate("user", "firstName email")
       .populate("products.productId", "productName productPrice");
 
     return res.status(200).json({
