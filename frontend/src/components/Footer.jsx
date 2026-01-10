@@ -110,7 +110,7 @@ const Footer = () => {
 
         {/* Bottom */}
         <div className="mt-10 border-t border-gray-800 pt-6 text-center text-sm text-gray-400">
-          © {new Date().getFullYear()} YourStore. All rights reserved.
+          © {new Date().getFullYear()} I-Cart. All rights reserved.
         </div>
       </div>
     </footer>

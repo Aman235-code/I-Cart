@@ -1,7 +1,9 @@
 import React from "react";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate()
   return (
     <section className="bg-linear-to-r from-purple-700 via-indigo-800 to-purple-800 text-white py-14">
       <div className="max-w-7xl mx-auto px-6 mt-9">
@@ -18,7 +20,7 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-white text-blue-600 hover:bg-gray-100">
+              <Button onClick={()=> navigate('/products')} className="bg-white text-blue-600 hover:bg-gray-100">
                 Shop Now
               </Button>
 
