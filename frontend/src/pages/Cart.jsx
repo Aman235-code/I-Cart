@@ -22,12 +22,11 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("accessToken");
-  console.warn(accessToken);
 
   const dispatch = useDispatch();
 
   const loadCart = async () => {
-    console.warn("here");
+    
     try {
       const res = await axios.get(`http://localhost:8000/api/v1/cart`, {
         headers: {
