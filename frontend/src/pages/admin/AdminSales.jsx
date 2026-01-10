@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -23,6 +23,7 @@ const AdminSales = () => {
   const accessToken = localStorage.getItem("accessToken");
 
   const fetchStats = async () => {
+   
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_URL}/api/v1/orders/sales`,
@@ -43,16 +44,16 @@ const AdminSales = () => {
 
   useEffect(() => {
     fetchStats();
-  });
+  },[]);
 
   return (
-    <div className="pl-[350px] bg-gray-100 py-20 pr-20 mx-auto px-4">
+    <div className="pl-87.5 bg-gray-100 py-20 pr-20 mx-auto px-4">
       <div className="p-6 grid gap-6 lg:grid-cols-4">
         <Card className={"bg-pink-500 text-white shadow"}>
           <CardHeader>
             <CardTitle>Total Users</CardTitle>
           </CardHeader>
-          <CardContent className={"text-2xl font-bold"}>
+          <CardContent  className={"text-2xl font-bold"}>
             {stats.totalUsers}
           </CardContent>
         </Card>
@@ -88,7 +89,8 @@ const AdminSales = () => {
           <CardHeader>
             <CardTitle>Sales (Last 30 Days)</CardTitle>
           </CardHeader>
-          <CardContent style={{ style: 300 }}>
+          <CardContent style={{ height: 300 }}>
+
             <ResponsiveContainer width={"100%"} height={"100%"}>
               <AreaChart data={stats.sales}>
                 <XAxis dataKey="date" />

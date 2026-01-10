@@ -223,7 +223,7 @@ export const getSalesData = async (req, res) => {
     const totalSales = totalSalesAgg[0]?.total || 0;
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    salesbyDate = await Order.aggregate([
+    const salesbyDate = await Order.aggregate([
       { $match: { status: "Paid", createdAt: { $gte: thirtyDaysAgo } } },
       {
         $group: {

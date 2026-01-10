@@ -27,13 +27,12 @@ const AdminOrders = () => {
     fetchOrders()
   }, [accessToken])
 
-  console.warn(orders)
 
   if(loading){
     return <div className="text-center py-20 text-gray-500">Loading all orders...</div>
   }
 
-  return <div className="pl-[350px] py-20 pr-20 mx-auto px-4">
+  return <div className="pl-87.5 py-20 pr-20 mx-auto px-4">
     <h1 className="text-3xl font-bold mb-6">Admin - All Orders</h1>
 
     {

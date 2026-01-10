@@ -33,7 +33,7 @@ const ShowUserOrders = () => {
   }, []);
 
   return (
-    <div className="pl-[350px] py-20 ">
+    <div className="pl-87.5 py-20 ">
       <OrderCard userOrder={userOrder} />
     </div>
   );
