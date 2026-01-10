@@ -1,6 +1,6 @@
 import React from "react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/Button";
+import { Button } from "./ui/button";
 
 const FilterSidebar = ({
   allProducts,
