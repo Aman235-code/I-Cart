@@ -140,36 +140,30 @@ export const createOrder = async (req, res) => {
 //   }
 // };
 
-export const verifyPayment = async (req, res) => {
-  return res.status(200).json({
-    success: true,
-    message: "Dummy payment verified",
-  });
+
+
+export const getMyOrder = async (req, res) => {
+  try {
+    const userId = req.id;
+    const orders = await Order.find({ user: userId })
+      .populate({
+        path: "products.productId",
+        select: "productName productPrice productImg",
+      })
+      .populate("user", "firstName lastName email");
+
+    return res.status(200).json({
+      success: true,
+      count: orders.length,
+      orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
-
-
-// export const getMyOrder = async (req, res) => {
-//   try {
-//     const userId = req.id;
-//     const orders = await Order.find({ user: userId })
-//       .populate({
-//         path: "products.productId",
-//         select: "productName productPrice productImg",
-//       })
-//       .populate("user", "firstName lastName email");
-
-//     return res.status(200).json({
-//       success: true,
-//       count: orders.length,
-//       orders,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
 
 export const getUserOrders = async (req, res) => {
   try {

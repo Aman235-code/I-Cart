@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import OrderCard from "@/components/OrderCard";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -25,9 +26,9 @@ const MyOrder = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     getUserOrders();
-  //   }, []);
+    useEffect(() => {
+      getUserOrders();
+    }, []);
 
   return <OrderCard userOrder={userOrder} />;
 };
