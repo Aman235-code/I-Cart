@@ -1,4 +1,4 @@
-import razorpayInstance from "../config/razorpay.js";
+// import razorpayInstance from "../config/razorpay.js";
 import { Order } from "../models/orderModel.js";
 import { Cart } from "../models/cartModel.js";
 import crypto from "crypto";
@@ -46,14 +46,14 @@ export const createOrder = async (req, res) => {
   try {
     const { products, amount, tax, shipping, currency } = req.body;
 
-    const newOrder = new Order({
+    const newOrder = await Order.create({
       user: req.user._id,
       products,
       amount,
       tax,
       shipping,
       currency: currency || "INR",
-      status: "Placed",
+      status: "Paid",
     });
 
     await newOrder.save();

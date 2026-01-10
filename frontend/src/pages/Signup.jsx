@@ -37,7 +37,6 @@ const Signup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       setLoading(true);
       const res = await axios.post(

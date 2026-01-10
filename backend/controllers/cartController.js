@@ -12,8 +12,6 @@ export const getCart = async (req, res) => {
       });
     }
 
-    console.log(cart);
-
     return res.status(200).json({
       success: true,
       cart,

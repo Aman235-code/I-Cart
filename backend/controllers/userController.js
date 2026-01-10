@@ -77,7 +77,6 @@ export const verify = async (req, res) => {
       decoded = jwt.verify(token, process.env.SECRET_KEY);
     } catch (error) {
       if (error.name === "TokenExpiredError") {
-        console.log(error);
         return res.status(400).json({
           success: false,
           message: "Registration token has expired",

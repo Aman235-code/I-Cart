@@ -154,41 +154,39 @@ const AddressForm = () => {
   //   }
   // };
 
-
   const handlePayment = async () => {
-  try {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_URL}/api/v1/orders/create-order`,
-      {
-        products: cart?.items?.map((item) => ({
-          productId: item.productId._id,
-          quantity: item.quantity,
-        })),
-        tax,
-        shipping,
-        amount: total,
-        currency: "INR",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_URL}/api/v1/orders/create-order`,
+        {
+          products: cart?.items?.map((item) => ({
+            productId: item.productId._id,
+            quantity: item.quantity,
+          })),
+          tax,
+          shipping,
+          amount: total,
+          currency: "INR",
         },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (!data.success) {
+        return toast.error("Something went wrong");
       }
-    );
 
-    if (!data.success) {
-      return toast.error("Something went wrong");
+      toast.success("Order placed successfully");
+      dispatch(setCart({ items: [], totalPrice: 0 }));
+      navigate("/order-success");
+    } catch (error) {
+      toast.error("Failed to place order");
+      console.log(error.message);
     }
-
-    toast.success("Order placed successfully");
-    dispatch(setCart({ items: [], totalPrice: 0 }));
-    navigate("/order-success");
-  } catch (error) {
-    toast.error("Failed to place order");
-    console.log(error.message);
-  }
-};
-
+  };
 
   return (
     <div className="max-w-7xl mx-auto grid place-items-center p-15">
