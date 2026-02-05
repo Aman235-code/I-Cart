@@ -40,8 +40,8 @@ export const register = async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "10m",
-      }
+        expiresIn: "30d",
+      },
     );
 
     verifyEmail(token, email); // send email here
@@ -128,7 +128,7 @@ export const reverify = async (req, res) => {
       process.env.SECRET_KEY,
       {
         expiresIn: "10m",
-      }
+      },
     );
 
     verifyEmail(token, email);
@@ -167,7 +167,7 @@ export const login = async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(
       password,
-      existingUser.password
+      existingUser.password,
     );
 
     if (!isPasswordValid) {
@@ -191,7 +191,7 @@ export const login = async (req, res) => {
       process.env.SECRET_KEY,
       {
         expiresIn: "10d",
-      }
+      },
     );
 
     const refreshToken = jwt.sign(
@@ -201,7 +201,7 @@ export const login = async (req, res) => {
       process.env.SECRET_KEY,
       {
         expiresIn: "30d",
-      }
+      },
     );
 
     existingUser.isLoggedIn = true;
@@ -394,7 +394,7 @@ export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId).select(
-      "-password -otp -otpExpiry -token"
+      "-password -otp -otpExpiry -token",
     );
     if (!user) {
       return res.status(404).json({
@@ -457,7 +457,7 @@ export const updateUser = async (req, res) => {
           (error, result) => {
             if (error) reject(error);
             else resolve(result);
-          }
+          },
         );
         stream.end(req.file.buffer);
       });
